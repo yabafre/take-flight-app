@@ -1,19 +1,22 @@
-import React from 'react';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import '@app/global.css';
+import React, { useState } from 'react';
 import { Tabs } from 'expo-router';
 import Logo from '@assets/icon-tab.svg';
-import { Vibration } from 'react-native';
+import { Heart, Home2, Profile } from "iconsax-react-native";
+import {Text, Vibration, View} from 'react-native';
 
 export default function TabLayout() {
+    const [activeTab, setActiveTab] = useState('index');
+
     return (
         <Tabs
             screenOptions={{
                 tabBarShowLabel: false,
                 headerShown: false,
-                tabBarActiveTintColor: '#FA4A0C',
+                tabBarActiveTintColor: '#91D3D6',
                 tabBarInactiveTintColor: '#0a0a0a',
-                tabBarStyle:{
-                    backgroundColor: '#fff',
+                tabBarStyle: {
+                    backgroundColor: 'transparent',
                     position: 'absolute',
                     borderColor: 'none',
                     borderTopWidth: 0,
@@ -32,51 +35,80 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="index"
                 options={({ navigation }) => ({
-                    title: 'Home',
-                    tabBarIcon: ({ color }) => (
-                        <AntDesign
-                            size={26}
-                            name="home"
-                            color={color}
-                            onPress={() => {
-                                Vibration.vibrate(10);
-                                navigation.navigate('index');
-                            }}
-                        />
+                    tabBarIcon: ({ color, focused }) => (
+                        <View className={'flex flex-col items-center gap-1'}>
+                            <Home2
+                                size={26}
+                                color={'#000'}
+                                variant={focused ? 'Bold' : 'Outline'}
+                                onPress={() => {
+                                    Vibration.vibrate(10);
+                                    navigation.navigate('index');
+                                    setActiveTab('index');
+                                }}
+                            />
+                            <View style={{ width: 7, height: 7, borderRadius: 3, marginTop: 2, backgroundColor: focused ? color : 'transparent'}}  />
+                        </View>
                     ),
                 })}
             />
             <Tabs.Screen
-                name="tFlight"
+                name="order"
                 options={({ navigation }) => ({
-                    title: 'TFlight',
-                    tabBarIcon: ({ color }) => (
-                        <Logo
-                            height={140}
-                            width={140}
-                            fill={color}
-                            onPress={() => {
-                                Vibration.vibrate(10);
-                                navigation.navigate('tFlight');
-                            }}
-                        />
+                    tabBarIcon: ({ color, focused }) => (
+                        <View className={'flex p-0 flex-col items-center gap-1'}>
+                            <Logo
+                                height={134}
+                                width={134}
+                                fill={'#000'}
+                                onPress={() => {
+                                    Vibration.vibrate(10);
+                                    navigation.navigate('order');
+                                    setActiveTab('order');
+                                }}
+                            />
+                            <View style={{ width: 7, height: 7, borderRadius: 3, marginTop: 2, backgroundColor: focused ? color : 'transparent'}}  />
+                        </View>
+                    ),
+                })}
+            />
+            <Tabs.Screen
+                name="wish"
+                options={({ navigation }) => ({
+                    tabBarIcon: ({ color, focused }) => (
+                        <View className={'flex flex-col items-center gap-1'}>
+                            <Heart
+                                size={26}
+                                color={'#000'}
+                                variant={focused ? 'Bold' : 'Outline'}
+                                onPress={() => {
+                                    Vibration.vibrate(10);
+                                    navigation.navigate('wish');
+                                    setActiveTab('wish');
+                                }}
+                            />
+                            <View style={{ width: 7, height: 7, borderRadius: 3, marginTop: 2, backgroundColor: focused ? color : 'transparent'}}  />
+                        </View>
                     ),
                 })}
             />
             <Tabs.Screen
                 name="profile"
                 options={({ navigation }) => ({
-                    title: 'Profile',
-                    tabBarIcon: ({ color }) => (
-                        <AntDesign
-                            size={26}
-                            name="user"
-                            color={color}
-                            onPress={() => {
-                                Vibration.vibrate(10);
-                                navigation.navigate('profile');
-                            }}
-                        />
+                    tabBarIcon: ({ color, focused }) => (
+                        <View className={'flex flex-col items-center gap-1'}>
+                            <Profile
+                                size={26}
+                                color={'#000'}
+                                variant={focused ? 'Bold' : 'Outline'}
+                                onPress={() => {
+                                    Vibration.vibrate(10);
+                                    navigation.navigate('profile');
+                                    setActiveTab('profile');
+                                }}
+                            />
+                            <View style={{ width: 7, height: 7, borderRadius: 3, marginTop: 2, backgroundColor: focused ? color : 'transparent'}}  />
+                        </View>
                     ),
                 })}
             />
