@@ -28,11 +28,33 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.takeflight.app"
+      "package": "com.takeflight.app",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "plugins": [
-      ["expo-router"],
-      ["@react-native-google-signin/google-signin"]
-    ]
+      [
+        "expo-router"
+      ],
+      [
+        "@react-native-google-signin/google-signin"
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "6b549a75-9492-4173-81fb-020f5b5c46bd"
+      }
+    }
   }
 }

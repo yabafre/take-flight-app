@@ -1,3 +1,6 @@
+// Desc: Auth slice for redux store
+// Path: src/store/auth/authSlice.js
+
 import {createSelector, createSlice} from '@reduxjs/toolkit';
 
 const initialState = {

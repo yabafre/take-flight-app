@@ -1,9 +1,12 @@
+// This is the root layout of your app
+
 // Import your global CSS file
 import '@app/global.css';
+import '@app/style/global.css.android.css';
 import React from 'react';
 import {Stack} from "expo-router";
 import { StatusBar } from 'expo-status-bar';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import store from '@app/store';
 import Toast from 'react-native-toast-message';

@@ -1,0 +1,81 @@
+/Take-flight-app
+├── .env
+├── .env.example
+├── .eslintrc.json
+├── /.expo
+├── /.git
+├── .gitignore
+├── /.idea
+├── .prettierrc.json
+├── /android
+├── app.json
+├── /assets
+│   ├── adaptive-icon.png
+│   ├── favicon.png
+│   ├── icon-tab.svg
+│   ├── icon-tf.svg
+│   ├── icon-wtflight.svg
+│   ├── icon.png
+│   ├── logo-full.svg
+│   ├── logo5-cropped.svg
+│   ├── logo5.svg
+│   ├── splash.png
+│   ├── /tabBar
+│   │   ├── tflight-ui.svg
+├── babel.config.js
+├── jsconfig.json
+├── metro.config.js
+├── /node_modules
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── README.md
+├── readStructure.mjs
+├── /src
+│   ├── /app
+│   │   ├── /(tabs)
+│   │   │   ├── index.jsx
+│   │   │   ├── /order
+│   │   │   │   ├── index.jsx
+│   │   │   │   ├── _layout.jsx
+│   │   │   ├── /profile
+│   │   │   │   ├── index.jsx
+│   │   │   │   ├── _layout.jsx
+│   │   │   ├── /wish
+│   │   │   │   ├── index.jsx
+│   │   │   │   ├── _layout.jsx
+│   │   │   ├── _layout.jsx
+│   │   ├── /blog
+│   │   │   ├── index.jsx
+│   │   ├── _layout.jsx
+│   ├── /components
+│   │   ├── /auth
+│   │   │   ├── GoogleNative.jsx
+│   │   ├── /common
+│   │   │   ├── ContainSafeArea.jsx
+│   │   │   ├── ToastConfig.jsx
+│   │   ├── /home
+│   │   │   ├── /header
+│   │   │   │   ├── HeadHome.jsx
+│   │   │   ├── /main
+│   │   │   │   ├── CardMain.jsx
+│   ├── global.css
+│   ├── /hooks
+│   │   ├── useAuth.jsx
+│   │   ├── useLocation.jsx
+│   ├── /providers
+│   │   ├── AuthProvider.jsx
+│   ├── /screens
+│   │   ├── /auth
+│   │   │   ├── LoginScreen.jsx
+│   ├── /services
+│   ├── /store
+│   │   ├── /auth
+│   │   │   ├── authSlice.js
+│   │   ├── index.jsx
+│   ├── /style
+│   │   ├── global.css.android.css
+│   ├── /utils
+│   │   ├── supabase.js
+│   │   ├── withAuth.jsx
+├── tailwind.config.js

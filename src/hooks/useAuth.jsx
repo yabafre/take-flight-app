@@ -1,7 +1,7 @@
 // useAuth.jsx:
 
 import {useEffect, useState} from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import {loginSuccess, loginFailure, logout} from '@app/store/auth/authSlice';
 import { supabase } from '@app/utils/supabase';

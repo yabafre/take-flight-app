@@ -1,11 +1,13 @@
 import { Link } from "expo-router";
 import React, {useEffect, useState} from "react";
-import {Text, View, Button, Alert, Pressable} from "react-native";
+import {Text, View, Pressable, ScrollView} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Logo from "@assets/logo-full.svg";
 import {supabase} from "@app/utils/supabase";
 import Toast from 'react-native-toast-message'
 import ContainSafeArea from "@app/components/common/ContainSafeArea";
+import HeadHome from "@app/components/home/header/HeadHome";
+import CardMain from "@app/components/home/main/CardMain";
+
 
 
 export default function Page() {
@@ -28,49 +30,25 @@ export default function Page() {
             autoHide: true,
         })
 
-        console.log(JSON.stringify(session?.user?.user_metadata, null, 2))
+        // console.log(JSON.stringify(session?.user?.user_metadata, null, 2))
 
     } ,[])
     return (
-        <ContainSafeArea>
-            <View className="py-12 md:py-24 lg:py-32 xl:py-48">
-                <View className="px-4 md:px-6">
-                    <View className="flex flex-col items-center gap-4 text-center">
-                        <Text
-                            role="heading"
-                            className="text-3xl text-center native:text-5xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl"
-                        >
-                            Welcome to Project TfLight
-                        </Text>
-                        <Text className="mx-auto max-w-[700px] text-lg text-center text-gray-500 md:text-xl">
-                            Discover and collaborate on Take Flight. Explore our services now.
-                        </Text>
-
-                        <View className="gap-4">
-                            <Logo height={200} width={200} />
-                            {session && session?.user && (
-                                <Text className="text-lg font-bold text-center">
-                                    Signed in as {session?.user?.user_metadata.full_name}
-                                </Text>
-                            )}
-                            {session && (
-                                <Pressable
-                                    className="bg-black rounded flex items-center justify-center"
-                                    onPress={async () => {
-                                        const { error } = await supabase.auth.signOut()
-                                        if (error) {
-                                            Alert.alert('Error logging out:', error.message)
-                                        }
-                                    }}
-                                >
-                                    <Text className="p-2 text-white">Sign Out</Text>
-                                </Pressable>
-                            )}
-                        </View>
-                    </View>
+        <>
+            <ContainSafeArea>
+                <View className="px-6 flex flex-col gap-4">
+                    <HeadHome user={session?.user?.user_metadata} />
                 </View>
-            </View>
-        </ContainSafeArea>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    <View className="flex flex-row items-center h-full w-full p-6 gap-4">
+                        <CardMain data={{image: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/28/d0/77/3b/caption.jpg?w=1200&h=-1&s=1', title: 'Hotel 1', city: 'Jakarta', location: 'Jakarta, Indonesia', rating: 4.5}} />
+                        <CardMain data={{image: 'https://imgcy.trivago.com/c_limit,d_dummy.jpeg,f_auto,h_600,q_auto,w_600//hotelier-images/cd/8c/d0b99f13f19ba4477b41e582a2a1e38ce27879bb9640ef481a5e20973b5e.jpeg', title: 'Hotel 1', city: 'Jakarta', location: 'Jakarta, Indonesia', rating: 4.5}} />
+                        <CardMain data={{image: 'https://imgcy.trivago.com/c_limit,d_dummy.jpeg,f_auto,h_600,q_auto,w_600//hotelier-images/cd/8c/d0b99f13f19ba4477b41e582a2a1e38ce27879bb9640ef481a5e20973b5e.jpeg', title: 'Hotel 1', city: 'Jakarta', location: 'Jakarta, Indonesia', rating: 4.5}} />
+                        <CardMain data={{image: 'https://imgcy.trivago.com/c_limit,d_dummy.jpeg,f_auto,h_600,q_auto,w_600//hotelier-images/cd/8c/d0b99f13f19ba4477b41e582a2a1e38ce27879bb9640ef481a5e20973b5e.jpeg', title: 'Hotel 1', city: 'Jakarta', location: 'Jakarta, Indonesia', rating: 4.5}} />
+                    </View>
+                </ScrollView>
+            </ContainSafeArea>
+        </>
     );
 }
 
