@@ -22,7 +22,6 @@ const RootLayout = () => {
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack>
-            <StatusBar style="auto" />
         </QueryClientProvider>
         <Toast position={'top'} topOffset={50} config={toastConfig} />
     </Provider>

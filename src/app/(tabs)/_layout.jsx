@@ -12,7 +12,7 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarShowLabel: false,
                 headerShown: false,
-                tabBarActiveTintColor: '#91D3D6',
+                tabBarActiveTintColor: '#1400ff',
                 tabBarInactiveTintColor: '#0a0a0a',
                 tabBarStyle: {
                     backgroundColor: 'transparent',
@@ -38,7 +38,7 @@ export default function TabLayout() {
                         <View className={'flex flex-col items-center gap-1'}>
                             <Home2
                                 size={26}
-                                color={'#000'}
+                                color={'#fff'}
                                 variant={focused ? 'Bold' : 'Outline'}
                                 onPress={() => {
                                     Vibration.vibrate(10);
@@ -59,7 +59,7 @@ export default function TabLayout() {
                             <Logo
                                 height={24}
                                 width={26}
-                                fill={ focused ? '#000' : 'rgba(0,0,0,0)'}
+                                fill={ focused ? '#fff' : '#000'}
                                 onPress={() => {
                                     Vibration.vibrate(10);
                                     navigation.navigate('order');
@@ -78,7 +78,7 @@ export default function TabLayout() {
                         <View className={'flex flex-col items-center gap-1'}>
                             <Heart
                                 size={26}
-                                color={'#000'}
+                                color={'#fff'}
                                 variant={focused ? 'Bold' : 'Outline'}
                                 onPress={() => {
                                     Vibration.vibrate(10);
@@ -98,7 +98,7 @@ export default function TabLayout() {
                         <View className={'flex flex-col items-center gap-1'}>
                             <Profile
                                 size={26}
-                                color={'#000'}
+                                color={'#fff'}
                                 variant={focused ? 'Bold' : 'Outline'}
                                 onPress={() => {
                                     Vibration.vibrate(10);

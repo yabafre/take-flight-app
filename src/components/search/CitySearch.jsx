@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CloseCircle } from 'iconsax-react-native';
 import { useCityAutocomplete } from '@app/hooks/useCityAutocomplete';
 import { Feather } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
 import { MotiView } from 'moti';
+import { Home3 } from 'iconsax-react-native';
 
 export default function CitySearch({ setCode, onClose }) {
   const { top, bottom } = useSafeAreaInsets();
@@ -19,15 +18,15 @@ export default function CitySearch({ setCode, onClose }) {
 
   const highlightText = (text, highlight) => {
     if (!highlight.trim()) {
-      return <Text>{text}</Text>;
+      return <Text className={'text-white'}>{text}</Text>;
     }
     const regex = new RegExp(`(${highlight})`, 'gi');
     const parts = text.split(regex);
     return (
-      <Text>
+      <Text className="text-white">
         {parts.map((part, index) =>
           part.toLowerCase() === highlight.toLowerCase() ? (
-            <Text key={index} className={'text-[#91D3D6]'}>
+            <Text key={index} className={'text-[#1400ff]'}>
               {part}
             </Text>
           ) : (
@@ -44,41 +43,39 @@ export default function CitySearch({ setCode, onClose }) {
       animate={{ translateY: 0 }}
       exit={{ translateY: 100 }}
       transition={{ type: 'timing', duration: 500 }}
-      className="flex-1 bg-white absolute z-[99] h-full w-full"
+      className="flex-1 bg-[#121212] absolute z-[99] h-full w-full"
       style={{ paddingTop: top + 50, paddingBottom: bottom }}
     >
       <View className="flex flex-row items-center p-4">
-        <View className="flex-1 flex flex-row items-center bg-white p-2 rounded-xl border-[1.5px] border-[#91D3D6]">
+        <View className="flex-1 flex flex-row items-center p-2 rounded-xl bg-[#181818]">
           <TextInput
             placeholder="Search city or airport"
             value={keyword}
             onChangeText={setKeyword}
-            className="flex-1 ml-2"
+            placeholderTextColor="#fff"
+            className="flex-1 ml-2 bg-transparent text-white placeholder:white"
           />
         </View>
-        {/*<TouchableOpacity onPress={onClose} className="ml-2 absolute right-4 -top-10">*/}
-        {/*  <CloseCircle size="32" color="#000" variant={'Bold'} />*/}
-        {/*</TouchableOpacity>*/}
       </View>
-      {isLoading && <ActivityIndicator size="large" color="#000" />}
-      {error && <Text className="text-center">Error loading cities</Text>}
+      {isLoading && <ActivityIndicator size="large" color="#fff" />}
+      {error && <Text className="text-center text-white">Error loading cities</Text>}
       <FlatList
         data={cities}
         className={`px-4 mb-8`}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity className="p-2 border-b border-gray-200" onPress={() => handleSelect(item.iataCode)}>
+          <TouchableOpacity className="p-2" onPress={() => handleSelect(item.iataCode)}>
             <View className="flex flex-row items-center">
               {item.subType === 'CITY' ? (
-                <MaterialIcons name="location-city" size={24} color="black" />
+                <Home3 size={22} variant={'Bold'} color="white" />
               ) : (
-                <Feather name="corner-down-right" size={22} color="black" className={'ml-6'} />
+                <Feather name="corner-down-right" size={16} color="white" className={'ml-6'} />
               )}
               <View className="ml-2 flex flex-row gap-2">
-                <Text className="text-black">{item.iataCode}</Text>
+                <Text className="text-white">{item.iataCode}</Text>
                 {highlightText(item.name, keyword)}
                 {item.subType === 'AIRPORT' && (
-                  <Text className="text-black capitalize">{item.subType}</Text>
+                  <Text className="text-white capitalize">{item.subType}</Text>
                 )}
               </View>
             </View>

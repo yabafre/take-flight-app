@@ -21,7 +21,7 @@ const VerticalDatePicker = ({ visible, onClose, onSelectDates, mode }) => {
       setStartDate(day.dateString);
     } else {
       if (!startDate || (startDate && endDate)) {
-        setSelectedDates({ [day.dateString]: { startingDay: true, color: '#91D3D6', textColor: 'white' } });
+        setSelectedDates({ [day.dateString]: { startingDay: true, color: '#1400ff', textColor: 'white' } });
         setStartDate(day.dateString);
         setEndDate('');
       } else {
@@ -32,10 +32,10 @@ const VerticalDatePicker = ({ visible, onClose, onSelectDates, mode }) => {
         for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
           const date = d.toISOString().split('T')[0];
           markedDates[date] = {
-            color: '#E6F7F8', // Couleur plus claire pour les jours intermédiaires
-            textColor: 'black',
-            ...(date === startDate && { startingDay: true, color: '#91D3D6', textColor: 'white' }),
-            ...(date === day.dateString && { endingDay: true, color: '#91D3D6', textColor: 'white' }),
+            color: '#A7A7F316', // Couleur plus claire pour les jours intermédiaires
+            textColor: 'white',
+            ...(date === startDate && { startingDay: true, color: '#1400ff', textColor: 'white' }),
+            ...(date === day.dateString && { endingDay: true, color: '#1400ff', textColor: 'white' }),
           };
         }
 
@@ -56,7 +56,7 @@ const VerticalDatePicker = ({ visible, onClose, onSelectDates, mode }) => {
       animate={{ translateY: 0 }}
       exit={{ translateY: 100 }}
       transition={{ type: 'timing', duration: 500 }}
-      className="flex-1 bg-white absolute z-[99] h-full w-full"
+      className="flex-1 bg-[#121212] absolute z-[99] h-full w-full"
       style={{ paddingTop: top - 5, paddingBottom: bottom }}
     >
       <View style={styles.container}>
@@ -76,27 +76,28 @@ const VerticalDatePicker = ({ visible, onClose, onSelectDates, mode }) => {
           showScrollIndicator
           style={{ height: height - 110 }}
           theme={{
-            calendarBackground: '#fff',
-            dayTextColor: '#000',
+            calendarBackground: '#121212',
+            todayBackgroundColor: '#1400ff',
+            todayTextColor: '#fff',
+            dayTextColor: '#fff',
             textDisabledColor: '#555555',
-            monthTextColor: '#000',
-            arrowColor: 'white',
+            monthTextColor: '#fff',
+            arrowColor: '#1400ff',
             selectedDayBackgroundColor: '#91D3D67F',
             selectedDayTextColor: '#ffffff',
-            todayTextColor: '#000',
-            selectedDotColor: '#000',
+            selectedDotColor: '#fff',
           }}
         />
-        <View className={`flex flex-col justify-center w-full items-center p-4 gap-2 absolute bottom-0 bg-white`}>
+        <View className={`flex flex-col justify-center w-full items-center p-4 gap-2 absolute bottom-0 bg-black`}>
           {mode === 'one-way' ? (
-            <Text className="text-black text-lg font-semibold">{startDate ? format(new Date(startDate), 'EEE, MMM d') : 'Select Departure Date'}</Text>
+            <Text className="text-white text-lg font-semibold">{startDate ? format(new Date(startDate), 'EEE, MMM d') : 'Select Departure Date'}</Text>
           ) : (
             <View className="flex flex-row justify-between items-center w-full">
-              <Text className="text-black text-lg font-semibold">{startDate ? format(new Date(startDate), 'EEE, MMM d') : 'Select Departure Date'}</Text>
-              <Text className="text-black text-lg font-semibold">{endDate ? format(new Date(endDate), 'EEE, MMM d') : 'Select Return Date'}</Text>
+              <Text className="text-white text-lg font-semibold">{startDate ? format(new Date(startDate), 'EEE, MMM d') : 'Select Departure Date'}</Text>
+              <Text className="text-white text-lg font-semibold">{endDate ? format(new Date(endDate), 'EEE, MMM d') : 'Select Return Date'}</Text>
             </View>
           )}
-          <TouchableOpacity onPress={handleDone} className="bg-black p-3 h-14 rounded-lg w-full">
+          <TouchableOpacity onPress={handleDone} className="bg-[#1400ff] p-3 h-14 rounded-lg w-full">
             <Text className="text-white text-xl font-semibold text-center">Done</Text>
           </TouchableOpacity>
         </View>
@@ -108,17 +109,17 @@ const VerticalDatePicker = ({ visible, onClose, onSelectDates, mode }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#121212',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#121212',
   },
   headerTitle: {
-    color: '#000',
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },

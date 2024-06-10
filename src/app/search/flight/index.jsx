@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, Pressable, TouchableOpacity, ScrollView } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Image } from 'expo-image';
-import { ArrowLeft } from 'iconsax-react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { ArrowLeft, Calendar, Profile2User } from 'iconsax-react-native';
+import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import CitySearch from '@app/components/search/CitySearch';
 import { format } from 'date-fns';
 import FullScreenDatePicker from '@app/components/search/SearchDatePicker';
 import PassengerModal from '@app/components/search/PassengerModal';
+import { StatusBar } from 'expo-status-bar';
+import { useDispatch } from 'react-redux';
+import { setSearchParams } from '@app/store/search/searchSlice';
 
 export default function SearchFlightPage() {
   const { top, bottom } = useSafeAreaInsets();
   const router = useRouter();
-  const [mode, setMode] = useState('one-way');
+  const [mode, setMode] = useState('round-trip');
   const [isScrolled, setIsScrolled] = useState(false);
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
@@ -23,6 +25,18 @@ export default function SearchFlightPage() {
   const [selectedDates, setSelectedDates] = useState('');
   const [showPassengerModal, setShowPassengerModal] = useState(false);
   const [passengers, setPassengers] = useState({ adults: '1', children: '0' });
+
+  const searchParams = {
+    originLocationCode: departureCity,
+    destinationLocationCode: arrivalCity,
+    departureDate: selectedDates.startDate,
+    returnDate: mode === 'round-trip' ? selectedDates.endDate : undefined,
+    adults: parseInt(passengers.adults),
+    children: parseInt(passengers.children) || 0,
+  };
+
+  // const { data, status, error, page, totalPages, setPage } = useSearch('flights', searchParams);
+
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
@@ -37,17 +51,22 @@ export default function SearchFlightPage() {
           setShowArrivalSearch(false);
           setShowDatePicker(false);
         }} className={`ml-2`}>
-          <MaterialIcons name="close" size={26} color="black" />
+          <MaterialIcons name="close" size={26} color="white" />
         </TouchableOpacity>
       );
     } else {
       return (
         <TouchableOpacity onPress={() => router.back()} className={`ml-2`}>
-          <ArrowLeft size={26} color={isScrolled ? '#fff' : '#000'} />
+          <ArrowLeft size={26} color={'#fff'} />
         </TouchableOpacity>
       );
     }
   };
+
+  const handleSubmit = (data) => {
+    console.log(data);
+    router.push('/search/result/flights');
+  }
 
   return (
     <>
@@ -61,69 +80,59 @@ export default function SearchFlightPage() {
           backViewIf()
         )
       }} />
+      <StatusBar
+        style={'light'}
+        backgroundColor={'#000'}
+      />
       <ScrollView
-        className={`flex-1 flex flex-col bg-green-400 h-full`}
+        className={`flex-1 flex flex-col h-full bg-[#121212]`}
         style={{ paddingTop: top + 60, paddingBottom: bottom }}
         onScroll={handleScroll}
         scrollEventThrottle={16} // To ensure smooth scroll handling
       >
-        <View className={`flex flex-col justify-center h-full px-6 pb-8 bg-white`}>
-          <View className="w-full flex flex-col justify-center gap-4 pb-24">
-            <View className="flex flex-row justify-between gap-2">
-              <Pressable onPress={() => setMode('one-way')} className={`p-3 flex-1 border border-gray-300 rounded-lg ${mode === 'one-way' ? 'bg-black' : 'bg-white'}`}>
-                <Text className={`text-center ${mode === 'one-way' ? 'text-white' : 'text-black'}`}>One-Way</Text>
+        <View className={`flex flex-col justify-center items-center h-full bg-[#121212] mt-8 p-6 pb-8`}>
+          <View className="w-full flex flex-col justify-center gap-6 pb-24">
+            <View className=" toggle-mode flex flex-row items-center justify-between rounded-2xl h-14 bg-[#181818]">
+              <Pressable onPress={() => setMode('one-way')} className={`flex-1 py-4 items-center justify-center rounded-l-2xl ${mode === 'one-way' ? 'bg-[#1400ff]' : ''}`}>
+                <Text className={`text-white`}>One Way</Text>
               </Pressable>
-              <Pressable onPress={() => setMode('round-trip')} className={`p-3 flex-1 border border-gray-300 rounded-lg ${mode === 'round-trip' ? 'bg-black' : 'bg-white'}`}>
-                <Text className={`text-center ${mode === 'round-trip' ? 'text-white' : 'text-black'}`}>Round-trip</Text>
+              <Pressable onPress={() => setMode('round-trip')} className={`flex-1 py-4 items-center justify-center rounded-r-2xl ${mode === 'round-trip' ? 'bg-[#1400ff]' : ''}`}>
+                <Text className={`text-white`}>Round Trip</Text>
               </Pressable>
             </View>
-            <View className="flex flex-row justify-between">
-              <Pressable onPress={() => setShowDepartureSearch(true)} className="flex-1 p-3 border border-gray-300 rounded-lg flex-row items-center">
-                <MaterialIcons name="flight-takeoff" size={24} color="black" />
-                <Text className="ml-2 flex-1">{departureCity || 'Departure'}</Text>
+            <View className="flex flex-row items-center gap-4 pr-4 justify-between w-full">
+              <Pressable onPress={() => setShowDepartureSearch(true)} className={`flex flex-row items-center justify-between rounded-2xl bg-[#181818] p-4 w-1/2 h-24`}>
+                <Text className={`text-white ${departureCity ? 'text-5xl' : 'text-xl'}`}>{departureCity || 'Departure'}</Text>
+                <Entypo name="aircraft-take-off" size={22} color="white" />
               </Pressable>
-              <View className="flex justify-center mx-2">
-                <MaterialIcons name="compare-arrows" size={24} color="black" />
+              <Pressable onPress={() => setShowArrivalSearch(true)} className={`flex flex-row items-center justify-between rounded-2xl bg-[#181818] p-4 w-1/2 h-24`}>
+                <Text className={`text-white ${arrivalCity ? 'text-5xl' : 'text-xl'}`}>{arrivalCity || 'Arrival'}</Text>
+                <Entypo name="aircraft-landing" size={22} color="white" />
+              </Pressable>
+            </View>
+            <Pressable onPress={() => setShowDatePicker(true)} className={`flex flex-row items-center justify-between rounded-2xl bg-[#181818] p-4 h-24`}>
+              <View className={`flex flex-row items-start gap-4`}>
+                <Text className={`text-white text-2xl`}>
+                  {mode === 'one-way' && selectedDates.startDate ? format(new Date(selectedDates.startDate), 'EEE, MMM d')  : mode === 'round-trip' && selectedDates.startDate ? format(new Date(selectedDates.startDate), 'EEE, MMM d') : 'Departure Date'}
+                </Text>
+                <Text className={`text-white text-2xl ${mode === 'one-way' ? 'hidden' : ''}`}>
+                  -
+                </Text>
+                <Text className={`text-white text-2xl`}>
+                  {mode === 'round-trip' && selectedDates.endDate ? ` ${format(new Date(selectedDates.endDate), 'EEE, MMM d')}` : mode === 'one-way' ? '' : 'Return Date'}
+                </Text>
               </View>
-              <Pressable onPress={() => setShowArrivalSearch(true)} className="flex-1 p-3 border border-gray-300 rounded-lg flex-row items-center">
-                <MaterialIcons name="flight-land" size={24} color="black" />
-                <Text className="ml-2 flex-1">{arrivalCity || 'Arrival'}</Text>
-              </Pressable>
-            </View>
-            <View className="mb-4">
-              <TouchableOpacity onPress={() => setShowDatePicker(true)} className="flex-row items-center border border-gray-300 rounded-lg p-3">
-                {mode === 'one-way' ? (
-                  <Text>{selectedDates.startDate ? format(new Date(selectedDates.startDate), 'EEE, MMM d') : 'Departure Date'}</Text>
-                ) : (
-                  <View className="flex flex-row justify-between w-full">
-                    <Text>{selectedDates.startDate ? format(new Date(selectedDates.startDate), 'EEE, MMM d') : 'Departure Date'}</Text>
-                    <Text>{selectedDates.endDate ? format(new Date(selectedDates.endDate), 'EEE, MMM d') : 'Return Date'}</Text>
-                  </View>
-                )}
-              </TouchableOpacity>
-            </View>
-            <View className="flex flex-row justify-between">
-              <TouchableOpacity onPress={() => setShowPassengerModal(true)} className="flex-1 p-3 border border-gray-300 rounded-lg flex-row items-center mr-2">
-                <MaterialIcons name="person" size={24} color="black" />
-                <Text className="ml-2 flex-1">{`${passengers.adults} Adults, ${passengers.children} Children`}</Text>
-              </TouchableOpacity>
-            </View>
-            <Pressable className="p-3 bg-black rounded-lg flex flex-row justify-center">
-              <Text className="text-white">Search Flights</Text>
+              <Calendar size={22} color="white" />
             </Pressable>
-            <View className="mt-6">
-              <Text className="text-lg font-semibold mb-2">Recently Searched</Text>
-              <View className="flex-row justify-between mb-4">
-                <View className="p-3 bg-white border border-gray-300 rounded-lg flex-1 mr-2">
-                  <Text className="text-black">LGW - AMS</Text>
-                  <Text className="text-gray-500">Jan 24, 24 • 1 Seat • Economy</Text>
-                </View>
-                <View className="p-3 bg-white border border-gray-300 rounded-lg flex-1">
-                  <Text className="text-black">NYC - LON</Text>
-                  <Text className="text-gray-500">Jan 04, 24 • 1 Seat • Economy</Text>
-                </View>
-              </View>
-            </View>
+
+            <Pressable onPress={() => setShowPassengerModal(true)} className={`flex flex-row items-center justify-between rounded-2xl bg-[#181818] p-4 h-24`}>
+              <Text className={`text-white text-xl`}>{passengers.adults} Adults, {passengers.children} Children</Text>
+              <Profile2User variant={'Bold'} size={22} color="white" />
+            </Pressable>
+
+            <Pressable onPress={handleSubmit} className={`flex flex-row items-center justify-center rounded-2xl bg-[#1400ff] p-4 h-14`}>
+              <Text className={`text-white`}>Search</Text>
+            </Pressable>
           </View>
         </View>
       </ScrollView>
