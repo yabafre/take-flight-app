@@ -1,4 +1,4 @@
-import { selectUser } from '@app/store/auth/authSlice';
+import { selectUser } from '@app/store/reducers/auth/authSlice';
 import { useSelector } from 'react-redux';
 import LoginScreen from "@app/screens/auth/LoginScreen";
 

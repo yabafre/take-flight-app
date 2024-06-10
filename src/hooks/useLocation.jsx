@@ -30,7 +30,12 @@ const useLocation = () => {
 
     const setDatas = () => {
         const { results } = data;
-        const addressComponents = results[0].address_components;
+        let addressComponents = [];
+        if (results.length > 0) {
+            addressComponents = results[0].address_components;
+        } else {
+            setErrorMsg('Address not found');
+        }
 
         const cityComponent = addressComponents.find(component => component.types.includes("locality"));
         const countryComponent = addressComponents.find(component => component.types.includes("country"));

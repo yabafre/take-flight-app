@@ -3,7 +3,7 @@
 import {useEffect, useState} from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
-import {loginSuccess, loginFailure, logout} from '@app/store/auth/authSlice';
+import {loginSuccess, loginFailure, logout} from '@app/store/reducers/auth/authSlice';
 import { supabase } from '@app/utils/supabase';
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
 

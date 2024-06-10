@@ -1,43 +1,61 @@
 // hooks/useFlightSearch.js
 import { useState, useEffect } from 'react';
-import useSearch from '@app/hooks/useSearch';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFlightSearchParams } from '@app/store/reducers/search/searchSlice';
 
 const useFlightSearch = () => {
-  const [mode, setMode] = useState('round-trip');
-  const [departureCity, setDepartureCity] = useState('');
-  const [arrivalCity, setArrivalCity] = useState('');
-  const [selectedDates, setSelectedDates] = useState({ startDate: '', endDate: '' });
-  const [passengers, setPassengers] = useState({ adults: '1', children: '0' });
+  const dispatch = useDispatch();
+  const flightSearchParams = useSelector((state) => state.search.flightSearchParams);
 
-  const searchParams = {
+  const [mode, setMode] = useState(flightSearchParams.mode || 'round-trip');
+  const [departureCity, setDepartureCity] = useState(flightSearchParams.originLocationCode || '');
+  const [arrivalCity, setArrivalCity] = useState(flightSearchParams.destinationLocationCode || '');
+  const [selectedDates, setSelectedDates] = useState({
+    startDate: flightSearchParams.departureDate || '',
+    endDate: flightSearchParams.returnDate || '',
+  });
+  const [passengers, setPassengers] = useState({
+    adults: flightSearchParams.adults?.toString() || '1',
+    children: flightSearchParams.children?.toString() || '0',
+  });
+
+  let searchParams = {
     originLocationCode: departureCity,
     destinationLocationCode: arrivalCity,
     departureDate: selectedDates.startDate,
-    returnDate: mode === 'round-trip' ? selectedDates.endDate : undefined,
     adults: parseInt(passengers.adults),
-    children: parseInt(passengers.children) || 0,
+    max: 50,
   };
 
-  const { data, status, error, page, totalPages, setPage } = useSearch('flights', searchParams);
+  if (mode === 'round-trip' && selectedDates.endDate) {
+    searchParams = {
+      ...searchParams,
+      returnDate: selectedDates.endDate,
+    };
+  }
 
-  return {
-    mode,
-    setMode,
-    departureCity,
-    setDepartureCity,
-    arrivalCity,
-    setArrivalCity,
-    selectedDates,
-    setSelectedDates,
-    passengers,
-    setPassengers,
-    data,
-    status,
-    error,
-    page,
-    totalPages,
-    setPage
-  };
+    if (passengers.children > 0) {
+      searchParams = {
+        ...searchParams,
+        children: parseInt(passengers.children),
+      };
+    }
+
+  useEffect(() => {
+    const paramsChanged =
+        flightSearchParams.originLocationCode !== searchParams.originLocationCode ||
+        flightSearchParams.destinationLocationCode !== searchParams.destinationLocationCode ||
+        flightSearchParams.departureDate !== searchParams.departureDate ||
+        flightSearchParams.returnDate !== searchParams.returnDate ||
+        flightSearchParams.adults !== searchParams.adults ||
+        flightSearchParams.children !== searchParams.children;
+
+    if (paramsChanged) {
+      dispatch(setFlightSearchParams(searchParams));
+    }
+  }, [searchParams, dispatch, flightSearchParams]);
+
+  return { searchParams, setDepartureCity, setArrivalCity, setSelectedDates, setPassengers, setMode, mode, departureCity, arrivalCity, selectedDates, passengers };
 };
 
 export default useFlightSearch;
