@@ -31,7 +31,7 @@ const useSearch = (type, params) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: [type, params],
     queryFn: typeFn,
-    enabled: !!params,
+    enabled: params !== null,
   });
 
   useEffect(() => {

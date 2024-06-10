@@ -5,7 +5,6 @@ import { Airplane, Briefcase } from 'iconsax-react-native';
 import { useSelector } from "react-redux";
 import airlineLogos from '@app/utils/airlineLogos';
 import { useRouter } from 'expo-router';
-import useSearch from '@app/hooks/useSearch';
 
 const ReturnFlightScreen = ({ flightData }) => {
     const router = useRouter();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -12,7 +12,18 @@ export default function ReturnFlightsPage() {
     const router = useRouter();
     const [isScrolled, setIsScrolled] = useState(false);
     const selectedFlight = useSelector((state) => state.search.selectedFlight);
-    const flightData = useSelector((state) => state.search.flights);
+    const flights = useSelector((state) => state.search.flights);
+    const [returnFlights, setReturnFlights] = useState([]);
+
+    useEffect(() => {
+        if (selectedFlight && flights) {
+            const filteredFlights = flights.data.filter(flight =>
+              flight.itineraries[0].segments[0].departure.iataCode === selectedFlight.itineraries[0].segments[selectedFlight.itineraries[0].segments.length - 1].arrival.iataCode &&
+              flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1].arrival.iataCode === selectedFlight.itineraries[0].segments[0].departure.iataCode
+            );
+            setReturnFlights(filteredFlights);
+        }
+    }, [selectedFlight, flights]);
 
     const handleScroll = (event) => {
         const scrollPosition = event.nativeEvent.contentOffset.y;
@@ -23,8 +34,8 @@ export default function ReturnFlightsPage() {
         if (!selectedFlight) {
             return <Text style={{ color: 'white' }}>Please select an outbound flight first</Text>;
         }
-        if (flightData) {
-            return <ReturnFlightScreen flightData={flightData} />;
+        if (returnFlights) {
+            return <ReturnFlightScreen flightData={{ data: returnFlights, dictionaries: flights.dictionaries, meta: { count: returnFlights.length } }} />;
         }
     };
 

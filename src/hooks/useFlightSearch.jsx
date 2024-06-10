@@ -24,7 +24,6 @@ const useFlightSearch = () => {
     destinationLocationCode: arrivalCity,
     departureDate: selectedDates.startDate,
     adults: parseInt(passengers.adults),
-    max: 50,
   };
 
   if (mode === 'round-trip' && selectedDates.endDate) {
