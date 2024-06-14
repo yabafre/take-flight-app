@@ -5,7 +5,7 @@ import {setError, setFlights, setHotels, setStatus,} from '@app/store/reducers/s
 import {useEffect} from "react";
 
 const fetchFlightOffers = async (params) => {
-  console.log('flight params : ',params)
+  // console.log('flight params : ',params)
   const response = await apiClient.get('/search/flight-offers', { params });
   return response.data;
 };
@@ -16,7 +16,7 @@ const fetchHotelOffers = async (params) => {
 };
 
 const useSearch = (type, params) => {
-  console.log('type : ',type, ',params : ',params)
+  // console.log('type : ',type, ',params : ',params)
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.search);
 

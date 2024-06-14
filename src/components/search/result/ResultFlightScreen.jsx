@@ -124,7 +124,7 @@ const ResultFlightScreen = ({ flightData }) => {
                       <View className="mt-4 flex-row justify-between items-center">
                         <Text className="text-white font-bold text-lg">{format(parseISO(departureSegment.departure.at), 'HH:mm')}</Text>
                         <Text className="text-white">-</Text>
-                        <View className="flex items-center">
+                        <View className="flex items-center gap-1">
                           <Text className="text-white text-xs">{numberOfStops > 0 ? `${numberOfStops} stops` : 'Direct'}</Text>
                           <View className="transform rotate-90 relative">
                             <Airplane size={18} variant={'Bold'} color="white" />

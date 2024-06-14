@@ -16,7 +16,8 @@ module.exports = function (api) {
             "@app/api": "./src/services/api",
           }
         }
-      ]
+      ],
+      ['react-native-reanimated/plugin', { processNestedWorklets: true }]
     ]
   };
 };

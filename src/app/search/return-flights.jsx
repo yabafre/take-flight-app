@@ -17,10 +17,27 @@ export default function ReturnFlightsPage() {
 
     useEffect(() => {
         if (selectedFlight && flights) {
-            const filteredFlights = flights.data.filter(flight =>
-              flight.itineraries[0].segments[0].departure.iataCode === selectedFlight.itineraries[0].segments[selectedFlight.itineraries[0].segments.length - 1].arrival.iataCode &&
-              flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1].arrival.iataCode === selectedFlight.itineraries[0].segments[0].departure.iataCode
-            );
+            const selectedFlightOutboundSegments = selectedFlight.itineraries[0].segments;
+            const filteredFlights = flights.data.filter(flight => {
+                const outboundItinerary = flight.itineraries[0];
+                const outboundSegments = outboundItinerary.segments;
+
+                if (outboundSegments.length !== selectedFlightOutboundSegments.length) {
+                    return false;
+                }
+
+                return outboundSegments.every((segment, index) => {
+                    const selectedSegment = selectedFlightOutboundSegments[index];
+                    return (
+                        segment.departure.iataCode === selectedSegment.departure.iataCode &&
+                        segment.arrival.iataCode === selectedSegment.arrival.iataCode &&
+                        segment.departure.at === selectedSegment.departure.at &&
+                        segment.arrival.at === selectedSegment.arrival.at &&
+                        segment.carrierCode === selectedSegment.carrierCode &&
+                        segment.number === selectedSegment.number
+                    );
+                });
+            });
             setReturnFlights(filteredFlights);
         }
     }, [selectedFlight, flights]);

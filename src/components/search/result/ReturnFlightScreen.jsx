@@ -4,10 +4,8 @@ import { format, parseISO } from 'date-fns';
 import { Airplane, Briefcase } from 'iconsax-react-native';
 import { useSelector } from "react-redux";
 import airlineLogos from '@app/utils/airlineLogos';
-import { useRouter } from 'expo-router';
 
 const ReturnFlightScreen = ({ flightData }) => {
-    const router = useRouter();
     const selectedFlight = useSelector((state) => state.search.selectedFlight);
 
     const formatDuration = (duration) => {
@@ -28,18 +26,12 @@ const ReturnFlightScreen = ({ flightData }) => {
             outbound: selectedFlight,
             inbound: returnFlight,
         };
-        console.log(finalFlightSelection);
+        console.log('finalFlightSelection', JSON.stringify(finalFlightSelection, null, 2));
         // Proceed to booking or next step
     };
 
-
-    if (!selectedFlight) {
-        return <Text style={{ color: 'white' }}>Please select an outbound flight first</Text>;
-    }
-
-    if (!flightData) {
-        return null;
-    }
+    // Calculer le prix du vol aller-retour par défaut
+    const defaultReturnPrice = selectedFlight.price.total;
 
     return (
         <>
@@ -56,11 +48,13 @@ const ReturnFlightScreen = ({ flightData }) => {
                 </View>
                 <View className="flex flex-col gap-4">
                     {flightData.data.map(flight => {
-                        const itinerary = flight.itineraries[0];
-                        const departureSegment = itinerary.segments[0];
-                        const arrivalSegment = itinerary.segments[itinerary.segments.length - 1];
-                        const totalDuration = itinerary.duration;
-                        const numberOfStops = itinerary.segments.length - 1;
+                        const returnItinerary = flight.itineraries[1];
+                        const departureSegment = returnItinerary.segments[0];
+                        const arrivalSegment = returnItinerary.segments[returnItinerary.segments.length - 1];
+                        const totalDuration = returnItinerary.duration;
+                        const numberOfStops = returnItinerary.segments.length - 1;
+                        const returnFlightPrice = flight.price.total;
+                        const priceDifference = (returnFlightPrice - defaultReturnPrice).toFixed(2);
 
                         return (
                             <View key={flight.id} className="bg-[#181818] rounded-2xl p-4 shadow-lg">
@@ -71,9 +65,9 @@ const ReturnFlightScreen = ({ flightData }) => {
                                 <View className="mt-4 flex-row justify-between items-center">
                                     <Text className="text-white font-bold text-lg">{format(parseISO(departureSegment.departure.at), 'HH:mm')}</Text>
                                     <Text className="text-white">-</Text>
-                                    <View className="flex items-center">
+                                    <View className="flex items-center gap-1">
                                         <Text className="text-white text-xs">{numberOfStops > 0 ? `${numberOfStops} stops` : 'Direct'}</Text>
-                                        <View className="transform rotate-270 relative">
+                                        <View className="transform -rotate-90 relative">
                                             <Airplane size={18} variant={'Bold'} color="white" />
                                         </View>
                                     </View>
@@ -86,7 +80,7 @@ const ReturnFlightScreen = ({ flightData }) => {
                                     <Text className="text-white">{arrivalSegment.arrival.iataCode}</Text>
                                 </View>
                                 <View className="flex-row justify-between items-center mt-2">
-                                    <Text className="text-white font-bold text-lg">{flight.price.total} {flightData.dictionaries.currencies[flight.price.currency]}</Text>
+                                    <Text className="text-white font-bold text-lg">{priceDifference > 0 ? `(+${priceDifference} ${flightData.dictionaries.currencies[flight.price.currency]})` : `(${priceDifference} ${flightData.dictionaries.currencies[flight.price.currency]})`}</Text>
                                     <View className="flex-row items-center gap-2">
                                         <Briefcase size={18} color="white" />
                                         <Text className="text-white text-lg">{flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity} bags</Text>
