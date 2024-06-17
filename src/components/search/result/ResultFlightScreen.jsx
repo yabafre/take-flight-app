@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { format, parseISO } from 'date-fns';
 import { Airplane, Setting4, Briefcase } from 'iconsax-react-native';
 import { useSelector, useDispatch } from "react-redux";
@@ -8,8 +8,10 @@ import CountryFlag from "react-native-country-flag";
 import airlineLogos from '@app/utils/airlineLogos';
 import { useRouter } from 'expo-router';
 import { setSelectedFlight } from '@app/store/reducers/search/searchSlice';
+import { Image } from 'expo-image';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const ResultFlightScreen = ({ flightData }) => {
+const ResultFlightScreen = ({ flightData, loading }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const flightSearchParams = useSelector((state) => state.search.flightSearchParams);
@@ -24,12 +26,20 @@ const ResultFlightScreen = ({ flightData }) => {
 
   const extractCityName = (data) => {
     if (!data) return '';
-    const cityEntry = data.find((entry) => entry.subType === 'CITY');
-    return cityEntry ? toCapitalize(cityEntry.name) : '';
+    const cityEntry = data.find((entry) => entry.subType === 'CITY' || entry.subType === 'AIRPORT');
+    if (cityEntry) {
+      if (cityEntry.subType === 'AIRPORT' && cityEntry.address) {
+        return toCapitalize(cityEntry.address.cityName);
+      } else {
+        return toCapitalize(cityEntry.name);
+      }
+    }
+    return '';
   };
 
   const originLocationName = () => {
-    return isOriginSuccess ? extractCityName(originData) : flightSearchParams.originLocationCode;
+    console.log('originData', originData);
+    return originData ? extractCityName(originData) : flightSearchParams.originLocationCode;
   };
 
   const destinationLocationName = () => {
@@ -44,8 +54,9 @@ const ResultFlightScreen = ({ flightData }) => {
   };
 
   const getCarrierLogoComponent = (carrierCode) => {
-    const LogoComponent = airlineLogos[carrierCode]?.compact_svg || airlineLogos[carrierCode]?.full_svg;
-    return LogoComponent ? <LogoComponent width={14} height={14} /> : null;
+    const LogoComponent = airlineLogos[carrierCode]?.compact_svg;
+    const srcLogo = airlineLogos[carrierCode]?.compact;
+    return LogoComponent ? <LogoComponent width={14} height={14} /> : <Image source={srcLogo} style={{ width: 14, height: 14 }} />;
   };
 
   const generateDateDots = () => {
@@ -86,17 +97,17 @@ const ResultFlightScreen = ({ flightData }) => {
               </View>
               <Text className="text-white text-lg font-bold">{flightSearchParams.returnDate ? format(parseISO(flightSearchParams.returnDate), 'dd MMM') : ''}</Text>
             </View>
-            <View className="absolute bottom-4 right-2 top-24">
-              <View className="flex flex-row items-center gap-4 bg-white rounded-xl py-1 px-2 relative overflow-hidden">
-                <View className="transform rotate-45 relative ">
-                  <Airplane size={18} variant={'Bold'} color="black" />
-                </View>
-                <View className="absolute top-0 left-0 right-0 bottom-0 bg-[#E0E0E018] opacity-50" />
-                {isDestinationSuccess && destinationData && destinationData.length > 0 && (
-                    <CountryFlag size={12} isoCode={destinationData.find((entry) => entry.subType === 'CITY')?.address.countryCode || ''} />
-                )}
-              </View>
-            </View>
+            {/*<View className="absolute bottom-4 right-2 top-24">*/}
+            {/*  <View className="flex flex-row items-center gap-4 bg-white rounded-xl py-1 px-2 relative overflow-hidden">*/}
+            {/*    <View className="transform rotate-45 relative ">*/}
+            {/*      <Airplane size={18} variant={'Bold'} color="black" />*/}
+            {/*    </View>*/}
+            {/*    <View className="absolute top-0 left-0 right-0 bottom-0 bg-[#E0E0E018] opacity-50" />*/}
+            {/*    {isDestinationSuccess && destinationData && destinationData.length > 0 && (*/}
+            {/*        <CountryFlag size={12} isoCode={destinationData.find((entry) => entry.subType === 'CITY')?.address.countryCode || ''} />*/}
+            {/*    )}*/}
+            {/*  </View>*/}
+            {/*</View>*/}
           </View>
           <View className="flex flex-row justify-between items-center p-4 bg-[#181818] rounded-xl">
             <Text className="text-white text-lg font-normal">Showing {flightData.meta.count} results</Text>
@@ -139,10 +150,10 @@ const ResultFlightScreen = ({ flightData }) => {
                         <Text className="text-white">{arrivalSegment.arrival.iataCode}</Text>
                       </View>
                       <View className="flex-row justify-between items-center mt-2">
-                        <Text className="text-white font-bold text-lg">{flight.price.total} {flightData.dictionaries.currencies[flight.price.currency]}</Text>
+                        <Text className="text-white font-bold text-lg">{flight.price.total}€</Text>
                         <View className="flex-row items-center gap-2">
-                          <Briefcase size={18} color="white" />
-                          <Text className="text-white text-lg">{flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity} bags</Text>
+                          <MaterialCommunityIcons name={'bag-suitcase-outline'} size={18} color="white" />
+                          <Text className="text-white text-lg">{flight.travelerPricings[0].fareDetailsBySegment[0].includedCheckedBags.quantity}</Text>
                         </View>
                         <TouchableOpacity
                             className="mt-4 bg-black py-2 px-4 rounded-lg items-center"
@@ -161,6 +172,11 @@ const ResultFlightScreen = ({ flightData }) => {
                   </View>
               );
             })}
+            {loading && (
+                <View className="flex flex-col items-center justify-center gap-4">
+                    <ActivityIndicator size="large" color="#1400ff" />
+                </View>
+            )}
           </View>
         </View>
       </>

@@ -52,7 +52,7 @@ export default function PassengerModal({ visible, onClose, onSelectPassengers })
             </View>
           </View>
           <Text className="text-xs text-gray-500 text-center my-4">
-            Results show avg. price/passenger (incl. taxes), prices may vary by passenger type.
+            Results show avg. price/passengers (incl. taxes), prices may vary by passenger type.
           </Text>
           <TouchableOpacity onPress={handleSave} className="w-full py-3 bg-[#1400ff] h-14 rounded-lg flex items-center">
             <Text className="text-white text-xl text-center font-bold">Confirm</Text>

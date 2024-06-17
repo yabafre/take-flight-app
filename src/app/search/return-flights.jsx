@@ -4,8 +4,11 @@ import { Stack, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import ReturnFlightScreen from '@app/components/search/result/ReturnFlightScreen';
-import { ArrowLeft } from 'iconsax-react-native';
+import { ArrowLeft, Airplane } from 'iconsax-react-native';
 import { useSelector } from "react-redux";
+import { useCityAutocomplete } from '@app/hooks/useCityAutocomplete';
+import { format, parseISO } from 'date-fns';
+
 
 export default function ReturnFlightsPage() {
     const { top, bottom } = useSafeAreaInsets();
@@ -14,6 +17,38 @@ export default function ReturnFlightsPage() {
     const selectedFlight = useSelector((state) => state.search.selectedFlight);
     const flights = useSelector((state) => state.search.flights);
     const [returnFlights, setReturnFlights] = useState([]);
+
+    const flightSearchParams = useSelector((state) => state.search.flightSearchParams);
+
+
+    const { data: originData, isSuccess: isOriginSuccess } = useCityAutocomplete(flightSearchParams.originLocationCode);
+    const { data: destinationData, isSuccess: isDestinationSuccess } = useCityAutocomplete(flightSearchParams.destinationLocationCode);
+
+    const toCapitalize = (str) => {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    };
+
+    const extractCityName = (data) => {
+        if (!data) return '';
+        const cityEntry = data.find((entry) => entry.subType === 'CITY' || entry.subType === 'AIRPORT');
+        if (cityEntry) {
+            if (cityEntry.subType === 'AIRPORT' && cityEntry.address) {
+                return toCapitalize(cityEntry.address.cityName);
+            } else {
+                return toCapitalize(cityEntry.name);
+            }
+        }
+        return '';
+    };
+
+    const originLocationName = () => {
+        return isOriginSuccess ? extractCityName(originData) : flightSearchParams.originLocationCode;
+    };
+
+    const destinationLocationName = () => {
+        return isDestinationSuccess ? extractCityName(destinationData) : flightSearchParams.destinationLocationCode;
+    };
 
     useEffect(() => {
         if (selectedFlight && flights) {
@@ -63,17 +98,25 @@ export default function ReturnFlightsPage() {
                 headerBackground: () => (
                     <View style={{ height: top + 60 }} className={isScrolled ? 'bg-[#121212]' : ''} />
                 ),
-                headerTitle: 'Return Flights',
+                headerTitle: '',
                 headerTintColor: '#fff',
                 headerTitleStyle: {
-                    fontSize: 29,
+                    fontSize: 18,
                     fontWeight: 'bold',
                 },
                 headerTitleAlign: 'center',
                 headerLeft: () => (
-                    <TouchableOpacity onPress={() => router.back()} className={`ml-2`}>
-                        <ArrowLeft size={26} color={'#fff'} />
-                    </TouchableOpacity>
+                  <TouchableOpacity onPress={() => router.back()} className={`mx-2 flex flex-row items-center gap-2`}>
+                      <ArrowLeft size={22} color={'#fff'} />
+                      <View className={`flex flex-row gap-2`}>
+                          <Text className="text-white text-sm font-bold">2: {destinationLocationName()}</Text>
+                          <View className="transform rotate-90 relative">
+                              <Airplane size={12} variant={'Bold'} color="white" />
+                          </View>
+                          <Text className="text-white text-sm font-bold"> {originLocationName()}</Text>
+                      </View>
+                      <Text className="text-white text-sm font-bold">{format(parseISO(selectedFlight.itineraries[1].segments[0].departure.at), 'dd MMM')}</Text>
+                  </TouchableOpacity>
                 )
             }} />
             <StatusBar
@@ -84,7 +127,7 @@ export default function ReturnFlightsPage() {
                 className={`flex-1 flex flex-col h-full bg-[#121212]`}
                 style={{ paddingTop: top + 60, paddingBottom: bottom }}
                 onScroll={handleScroll}
-                scrollEventThrottle={16} // To ensure smooth scroll handling
+                scrollEventThrottle={16}
             >
                 {renderContent()}
             </ScrollView>
