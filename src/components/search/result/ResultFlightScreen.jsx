@@ -38,7 +38,7 @@ const ResultFlightScreen = ({ flightData, loading }) => {
   };
 
   const originLocationName = () => {
-    console.log('originData', originData);
+    // console.log('originData', originData);
     return originData ? extractCityName(originData) : flightSearchParams.originLocationCode;
   };
 
@@ -70,7 +70,12 @@ const ResultFlightScreen = ({ flightData, loading }) => {
 
   const handleSelectFlight = (flight) => {
     dispatch(setSelectedFlight(flight));
-    router.push('/search/return-flights');
+    const mode = flightSearchParams.returnDate ? 'round-trip' : 'one-way';
+    if (mode === 'round-trip') {
+      router.push('/search/return-flights');
+    } else {
+      console.log('Selected flight', flight);
+    }
   };
 
   if (!flightData || !flightData.data || !flightData.dictionaries) {

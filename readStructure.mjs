@@ -7,7 +7,7 @@ import { fileURLToPath } from "url"
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const ignoreDirs = ['.idea', '.next', '.vscode', 'node_modules', '.git', '.expo', 'android', 'ios', 'public', 'build', 'dist', 'coverage', 'tmp', 'temp'];
+const ignoreDirs = ['.idea', '.next', '.vscode', 'node_modules', '.git', '.expo', 'android', 'ios', 'public', 'build', 'dist', 'coverage', 'tmp', 'temp', 'assets'];
 
 function readDirectory(dir, depth = 0) {
   if (ignoreDirs.includes(path.basename(dir))) return;

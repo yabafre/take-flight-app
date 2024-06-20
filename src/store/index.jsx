@@ -13,7 +13,7 @@ const store = configureStore({
       getDefaultMiddleware({
           serializableCheck: false,
       }).concat(logger),
-  devTools: true,
+  devTools: false,
 });
 
 export default store;

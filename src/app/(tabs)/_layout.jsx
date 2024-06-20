@@ -15,7 +15,7 @@ export default function TabLayout() {
                 tabBarActiveTintColor: '#1400ff',
                 tabBarInactiveTintColor: '#0a0a0a',
                 tabBarStyle: {
-                    backgroundColor: 'transparent',
+                    backgroundColor: '#121212',
                     position: 'absolute',
                     borderColor: 'none',
                     borderTopWidth: 0,
@@ -53,7 +53,8 @@ export default function TabLayout() {
             />
             <Tabs.Screen
                 name="order"
-                options={({ navigation }) => ({
+                options={
+              ({ navigation }) => ({
                     tabBarIcon: ({ color, focused }) => (
                         <View className={'flex p-0 flex-col items-center gap-1'}>
                             <Logo
@@ -69,7 +70,8 @@ export default function TabLayout() {
                             <View style={{ width: 7, height: 7, borderRadius: 3, marginTop: 2, backgroundColor: focused ? color : 'transparent'}}  />
                         </View>
                     ),
-                })}
+                })
+            }
             />
             <Tabs.Screen
                 name="wish"

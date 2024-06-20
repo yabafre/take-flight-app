@@ -39,18 +39,24 @@ const ReturnFlightScreen = ({ flightData }) => {
     return (
       <>
           <View className="bg-[#121212] h-full top-4 py-4 px-6 mb-36 gap-6">
-              <View className="box-card p-4 bg-[#1400ff] rounded-2xl w-full flex flex-col items-start justify-between relative">
+              <View className="box-card p-4 bg-[#1400ff] rounded-2xl h-[255px] flex flex-col items-start justify-between relative">
                   <View className={'flex flex-row items-center justify-center gap-2'}>
                       <Text className="text-white text-lg font-semibold">{format(parseISO(selectedFlight.itineraries[0].segments[0].departure.at), 'EEE, MMM dd')}</Text>
                       <Text className="text-white">{formatDuration(selectedFlight.itineraries[0].duration)}</Text>
                       {selectedFlight.validatingAirlineCodes.map((carrierCode, index) => (
-                        <View key={index} className="flex flex-row items-center gap-2 bg-white rounded p-[1px]">
+                        <View key={index} className="flex flex-row items-center gap-2 bg-white rounded p-[1.5px]">
                             {getCarrierLogoComponent(carrierCode)}
                         </View>
                       ))}
                   </View>
-                  <View className="flex flex-row items-center justify-between w-full">
-                      <View className="w-1/3 flex flex-col items-start gap-2">
+                  <View className="flex flex-row items-center justify-between h-[50%] bg-black w-full">
+                      <View className="w-1/3 flex flex-col items-start h-full justify-between gap-2">
+                          {selectedFlight.itineraries[0].segments.map((segment, index) => (
+                                <Text key={index}  className="text-white">{format(parseISO(segment.departure.at), 'HH:mm')}</Text>
+                          ))}
+                          {selectedFlight.itineraries[0].segments.map((segment, index) => (
+                                <Text key={index}  className="text-white">{format(parseISO(segment.arrival.at), 'HH:mm')}</Text>
+                          ))}
                       </View>
                       <View className="w-2/3 flex flex-col items-center gap-2">
                           {showDetails && (
@@ -83,10 +89,6 @@ const ReturnFlightScreen = ({ flightData }) => {
                           <Text className="text-white text-lg font-bold">{selectedFlight.price.total}€</Text>
                       </View>
                   </View>
-              </View>
-
-              <View className="flex flex-row justify-between items-center p-4 bg-[#181818] rounded-xl">
-                  <Text className="text-white text-lg font-normal">Showing {flightData.meta.count} results</Text>
               </View>
 
               <View className="flex flex-col gap-4">

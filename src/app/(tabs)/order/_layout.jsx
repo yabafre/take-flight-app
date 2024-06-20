@@ -6,7 +6,7 @@ import ContainSafeArea from "@app/components/common/ContainSafeArea";
 export default function OrderLayout() {
     return (
         <AuthProvider>
-            <ContainSafeArea>
+            <ContainSafeArea bg={"#121212"}>
                 <Slot />
             </ContainSafeArea>
         </AuthProvider>
