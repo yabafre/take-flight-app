@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import store from '@app/store';
 import Toast from 'react-native-toast-message';
 import toastConfig from "@app/components/common/ToastConfig";
+import AuthInitializer from "@app/components/auth/AuthInitializer";
 
 
 
@@ -19,6 +20,7 @@ const RootLayout = () => {
   return (
     <Provider store={store}>
         <QueryClientProvider client={queryClient}>
+            <AuthInitializer />
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack>
