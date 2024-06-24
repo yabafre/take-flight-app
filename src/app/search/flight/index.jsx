@@ -15,7 +15,6 @@ export default function SearchFlightPage() {
   const { top, bottom } = useSafeAreaInsets();
   const router = useRouter();
   const {
-    searchParams,
     setDepartureCity,
     setArrivalCity,
     setSelectedDates,

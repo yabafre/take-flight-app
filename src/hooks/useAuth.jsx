@@ -53,7 +53,7 @@ const useAuth = () => {
         if (error) {
           dispatch(loginFailure(error.message));
         } else {
-          dispatch(loginSuccess({ session, data }));
+          dispatch(loginSuccess({ user: session.user, data }));
         }
       }
       return { session, error };
@@ -116,7 +116,7 @@ const useAuth = () => {
           if (error) {
             dispatch(loginFailure(error.message));
           } else {
-            dispatch(loginSuccess({ session, data }));
+            dispatch(loginSuccess({ user: session.user, data }));
           }
         }
       } else {
@@ -165,7 +165,7 @@ const useAuth = () => {
         if (error) {
           dispatch(loginFailure(error.message));
         } else {
-          dispatch(loginSuccess({ session, data }));
+          dispatch(loginSuccess({ user: session.user, data }));
         }
       }
       setLoading(false);
@@ -181,7 +181,7 @@ const useAuth = () => {
         if (error) {
           dispatch(loginFailure(error.message));
         } else {
-          dispatch(loginSuccess({ session, data }));
+          dispatch(loginSuccess({ user: session.user, data }));
         }
       } else {
         dispatch(loginSuccess(null));

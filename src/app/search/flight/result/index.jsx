@@ -11,12 +11,11 @@ import { useSelector } from "react-redux";
 export default function ResultPage() {
     const { top, bottom } = useSafeAreaInsets();
     const router = useRouter();
-    const globalSearchParams = useGlobalSearchParams();
     const [isScrolled, setIsScrolled] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [flight, setFlight] = useState([]);
     const [loadingMore, setLoadingMore] = useState(false);
-    const PAGINATION_SIZE = 50;
+    const PAGINATION_SIZE = 30;
     const flightSearchParams = useSelector((state) => state.search.flightSearchParams);
 
     const { status, error } = useSearch('flights', flightSearchParams);

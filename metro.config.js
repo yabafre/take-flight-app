@@ -4,10 +4,10 @@ const path = require("path");
 
 const config = getDefaultConfig(__dirname);
 
-// Configure the transformers
+// Combine les transformers
 config.transformer = {
     ...config.transformer,
-    babelTransformerPath: require.resolve("react-native-sass-transformer"),
+    babelTransformerPath: require.resolve("react-native-svg-transformer"),
     getTransformOptions: async () => ({
         transform: {
             experimentalImportSupport: false,
@@ -16,21 +16,21 @@ config.transformer = {
     }),
 };
 
-// Extend the resolver configuration
+// Configuration du resolver
 config.resolver = {
     ...config.resolver,
     extraNodeModules: {
-        "@": path.resolve(__dirname, "./"), // Point "@" to the root directory
-        "@app": path.resolve(__dirname, "src"), // Point "@app" to the "src" directory
-        "@assets": path.resolve(__dirname, "assets"), // Point "@assets" to the "assets" directory
-        "@app/api": path.resolve(__dirname, "src/services/api"), // Point "@app/api" to the "src/services/api" file
+        "@": path.resolve(__dirname, "./"),
+        "@app": path.resolve(__dirname, "src"),
+        "@assets": path.resolve(__dirname, "assets"),
+        "@app/api": path.resolve(__dirname, "src/services/api"),
     },
-    assetExts: config.resolver.assetExts.filter((ext) => ext !== "svg"), // Remove "svg" from the list of asset extensions
-    sourceExts: [...config.resolver.sourceExts, "svg", "scss", "sass"], // Add "svg", "scss", and "sass" to the list of source extensions
+    assetExts: config.resolver.assetExts.filter((ext) => ext !== "svg"),
+    sourceExts: [...config.resolver.sourceExts, "svg", "scss", "sass"],
 };
 
-// Include react-native-svg-transformer separately
-config.transformer.babelTransformerPath = require.resolve("react-native-svg-transformer");
+// Ajout du support pour SASS
+config.transformer.sassTransformerPath = require.resolve("react-native-sass-transformer");
 
 module.exports = withNativeWind(config, {
     input: "./src/global.css",

@@ -1,45 +1,30 @@
 import { Link } from "expo-router";
 import React, {useEffect, useState} from "react";
-import {Text, View, Pressable, ScrollView} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import {supabase} from "@app/utils/supabase";
+import {Text, View, ScrollView} from "react-native";
 import CountryFlag from "react-native-country-flag";
 import Toast from 'react-native-toast-message'
 import ContainSafeArea from "@app/components/common/ContainSafeArea";
 import HeadHome from "@app/components/home/header/HeadHome";
 import CardMain from "@app/components/home/main/CardMain";
 import { ArrowRight2 } from 'iconsax-react-native';
-
+import { useSelector } from 'react-redux';
+import { selectUser } from '@app/store/reducers/auth/authSlice';
 
 
 export default function Page() {
-    const { top } = useSafeAreaInsets();
-    const [session, setSession] = useState(null)
+    const [user, setUser] = useState({})
+    const userSelector = useSelector(selectUser);
 
     useEffect(() => {
-        supabase.auth.getSession().then(({data: {session}}) => {
-            setSession(session)
-        } ,[])
-
-        const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-            setSession(session)
-        })
-
-        // Toast.show({
-        //     type: 'success',
-        //     text1: 'Welcome to Project TfLight',
-        //     visibilityTime: 3000,
-        //     autoHide: true,
-        // })
-
-        // console.log(JSON.stringify(session, null, 2))
-
-    } ,[])
+        if (userSelector.user) {
+            setUser(userSelector.user)
+        }
+    } , [userSelector])
     return (
         <>
             <ContainSafeArea bg={"#121212"}>
                 <View className="px-6 flex flex-col gap-4">
-                    <HeadHome user={session?.user?.user_metadata} />
+                    <HeadHome user={user?.user_metadata} />
                 </View>
                 <View className="flex-1 bg-dark">
                     <View className="px-6 flex flex-row items-center justify-between">

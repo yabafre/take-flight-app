@@ -5,6 +5,7 @@ import { Location, Notification, Airplane, ArrowRight } from "iconsax-react-nati
 import useLocation from '@app/hooks/useLocation';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
 
+
 export default function HeadHome({ user }) {
     const router = useRouter();
     const { isLoading, location, errorMsg } = useLocation();
