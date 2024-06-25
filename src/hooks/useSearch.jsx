@@ -6,14 +6,35 @@ import {useEffect} from "react";
 
 const fetchFlightOffers = async (params) => {
   // console.log('flight params : ',params)
-  const response = await apiClient.get('/search/flight-offers', { params });
-  return response.data;
+  try {
+    const response = await apiClient.get('/search/flight-offers', { params });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 const fetchHotelOffers = async (params) => {
-  const response = await apiClient.get('/search/hotels/offers', { params });
-  return response.data;
+  try {
+    const response = await apiClient.get('/search/hotels/offers', { params });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
+
+const fetchFlightPricing = async (flightOffer) => {
+    try {
+      const response = await apiClient.post('/search/flight-offers/pricing', flightOffer);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+}
+
 
 const useSearch = (type, params) => {
   // console.log('type : ',type, ',params : ',params)
@@ -25,13 +46,15 @@ const useSearch = (type, params) => {
       return fetchFlightOffers(params);
     } else if (type === 'hotels') {
       return fetchHotelOffers(params);
+    } else if (type === 'flight-pricing') {
+      return fetchFlightPricing(params);
     }
   }
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [type, params],
     queryFn: typeFn,
-    enabled: params !== null,
+    enabled: params !== null && params !== undefined,
   });
 
   useEffect(() => {
