@@ -4,10 +4,14 @@ import { Image } from 'expo-image';
 import { format, parseISO } from 'date-fns';
 import { Airplane } from 'iconsax-react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import airlineLogos from '@app/utils/airlineLogos';
+import { useRouter } from 'expo-router';
+import { setSelectedFlight } from '@app/store/reducers/search/searchSlice';
 
 const ReturnFlightScreen = ({ flightData }) => {
+    const dispatch = useDispatch();
+    const router = useRouter();
     const selectedFlight = useSelector((state) => state.search.selectedFlight);
     const [showDetails, setShowDetails] = useState(false);
 
@@ -25,13 +29,8 @@ const ReturnFlightScreen = ({ flightData }) => {
     };
 
     const handleSelectReturnFlight = (returnFlight) => {
-        // Combine selected outbound flight and return flight for final booking
-        const finalFlightSelection = {
-            outbound: selectedFlight,
-            inbound: returnFlight,
-        };
-        console.log('finalFlightSelection', JSON.stringify(finalFlightSelection, null, 2));
-        // Proceed to booking or next step
+        dispatch(setSelectedFlight(returnFlight));
+        router.push('/search/flight/result/pricing');
     };
 
     const defaultReturnPrice = selectedFlight.price.total;

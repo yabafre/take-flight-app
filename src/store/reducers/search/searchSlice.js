@@ -6,6 +6,9 @@ const initialState = {
   flightSearchParams: {},
   hotelSearchParams: {},
   selectedFlight: null,
+  flightPricingData: null,
+  allInclusiveParams: {},
+  allInclusiveData: null,
   status: 'idle',
   error: null,
 };
@@ -29,6 +32,15 @@ const searchSlice = createSlice({
     setSelectedFlight: (state, action) => {
       state.selectedFlight = action.payload;
     },
+    setflightPricingData: (state, action) => {
+      state.flightPricingData = action.payload;
+    },
+    setAllInclusiveParams: (state, action) => {
+      state.allInclusiveParams = action.payload;
+    },
+    setAllInclusiveData: (state, action) => {
+      state.allInclusiveData = action.payload;
+    },
     setStatus: (state, action) => {
       state.status = action.payload;
     },
@@ -42,8 +54,11 @@ export const {
   setFlights,
   setHotels,
   setSelectedFlight,
+  setflightPricingData,
   setFlightSearchParams,
   setHotelSearchParams,
+  setAllInclusiveParams,
+  setAllInclusiveData,
   setStatus,
   setError,
 } = searchSlice.actions;

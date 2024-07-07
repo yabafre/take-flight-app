@@ -9,7 +9,7 @@ const fetchCityAutocomplete = async (keyword) => {
         keyword: keyword
       }
     });
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);

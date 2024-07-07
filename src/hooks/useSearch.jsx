@@ -1,17 +1,16 @@
-import {useQuery} from '@tanstack/react-query';
-import {useDispatch, useSelector} from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
+import { useDispatch, useSelector } from 'react-redux';
 import apiClient from '@app/api';
-import {setError, setFlights, setHotels, setStatus,} from '@app/store/reducers/search/searchSlice';
-import {useEffect} from "react";
+import { setError, setFlights, setHotels, setflightPricingData, setStatus, setAllInclusiveData } from '@app/store/reducers/search/searchSlice';
+import { useEffect } from 'react';
 
 const fetchFlightOffers = async (params) => {
-  // console.log('flight params : ',params)
   try {
     const response = await apiClient.get('/search/flight-offers', { params });
     return response.data;
   } catch (error) {
     console.error(error);
-    return null;
+    throw error;
   }
 };
 
@@ -21,23 +20,31 @@ const fetchHotelOffers = async (params) => {
     return response.data;
   } catch (error) {
     console.error(error);
-    return null;
+    throw error;
   }
 };
 
 const fetchFlightPricing = async (flightOffer) => {
-    try {
-      const response = await apiClient.post('/search/flight-offers/pricing', flightOffer);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-}
+  try {
+    const response = await apiClient.post('/search/flight-offers/pricing', flightOffer);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
+const fetchAllInclusiveOffers = async (params) => {
+  try {
+    const response = await apiClient.post('/search/assistant', params);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 const useSearch = (type, params) => {
-  // console.log('type : ',type, ',params : ',params)
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.search);
 
@@ -48,8 +55,10 @@ const useSearch = (type, params) => {
       return fetchHotelOffers(params);
     } else if (type === 'flight-pricing') {
       return fetchFlightPricing(params);
+    } else if (type === 'all-inclusive') {
+      return fetchAllInclusiveOffers(params);
     }
-  }
+  };
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [type, params],
@@ -69,11 +78,15 @@ const useSearch = (type, params) => {
         dispatch(setFlights(data));
       } else if (type === 'hotels') {
         dispatch(setHotels(data));
+      } else if (type === 'flight-pricing') {
+        dispatch(setflightPricingData(data));
+      } else if (type === 'all-inclusive') {
+        dispatch(setAllInclusiveData(data));
       }
     }
   }, [data, isLoading, isError, error, type, dispatch]);
 
-  return { status, error };
+  return { status, error, data };
 };
 
 export default useSearch;

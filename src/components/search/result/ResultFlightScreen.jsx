@@ -74,7 +74,7 @@ const ResultFlightScreen = ({ flightData, loading }) => {
     if (mode === 'round-trip') {
       router.push('/search/return-flights');
     } else {
-      console.log('Selected flight', flight);
+      router.push('/search/flight/result/pricing');
     }
   };
 

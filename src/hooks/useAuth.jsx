@@ -16,6 +16,7 @@ const useAuth = () => {
   GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     webClientId: '968205667274-v2qpjdrpe55fo416s68mp1frpua1q15g.apps.googleusercontent.com',
+    iosClientId: '968205667274-crf78b0i7qsefpalbge35rm2nl93865n.apps.googleusercontent.com'
   });
 
   const [loading, setLoading] = useState(true);
