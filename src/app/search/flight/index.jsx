@@ -68,7 +68,8 @@ export default function SearchFlightPage() {
           headerBackground: () => (
               <View style={{ height: top + 60 }} className={isScrolled ? 'bg-black' : ''} />
           ),
-          headerTitle: '',
+          headerTitle: 'Flight search',
+          headerTintColor: '#fff',
           headerLeft: () => (
               backViewIf()
           )

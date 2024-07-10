@@ -16,7 +16,7 @@ export default function Page() {
     const userSelector = useSelector(selectUser);
 
     useEffect(() => {
-        if (userSelector.user) {
+        if (userSelector?.user) {
             setUser(userSelector.user)
         }
     } , [userSelector])

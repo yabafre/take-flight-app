@@ -42,7 +42,7 @@ export default function HeadHome({ user }) {
                 </View>
             </View>
             <View className="flex flex-row items-center gap-2 w-full relative right-1">
-                <Pressable className="flex flex-col items-start gap-4 bg-[#181818] p-4 rounded-lg w-1/3" onPress={() => router.push('/search/flight')} >
+                <Pressable className="flex flex-col items-start gap-4 bg-[#181818] p-4 rounded-lg w-1/2" onPress={() => router.push('/search/flight')} >
                     <View className="flex flex-row items-center justify-between w-full">
                         <Text className="text-md font-semibold text-white">Flights</Text>
                         <View className={'transform -rotate-45'}>
@@ -53,7 +53,7 @@ export default function HeadHome({ user }) {
                         <Airplane  variant={"Outline"} size={32} color={'#fff'} />
                     </View>
                 </Pressable>
-                <Pressable className="flex flex-col items-start gap-4 bg-[#181818] p-4 rounded-lg w-1/3" onPress={() => router.push('/search/allinclude')} >
+                <Pressable className="flex flex-col items-start gap-4 bg-[#181818] p-4 rounded-lg w-1/2" onPress={() => router.push('/search/allinclude')} >
                     <View className={'flex flex-row items-center justify-between w-full'}>
                         <Text className="text-md font-semibold text-white">All</Text>
                         <View className={'transform -rotate-45'}>
@@ -64,17 +64,17 @@ export default function HeadHome({ user }) {
                         <Entypo name={"infinity"} size={32} color={'#fff'} />
                     </View>
                 </Pressable>
-                <Pressable className="flex flex-col items-start gap-4 bg-[#181818] p-4 rounded-lg w-1/3" onPress={() => router.push('/search/hotel')} >
-                    <View className={'flex flex-row items-center justify-between w-full'}>
-                        <Text className="text-md font-semibold text-white">Hotel</Text>
-                        <View className={'transform -rotate-45'}>
-                            <ArrowRight size={16} color={'#fff'} />
-                        </View>
-                    </View>
-                    <View className="flex flex-row items-center gap-4">
-                        <MaterialIcons name={"hotel"} size={32} color={'#fff'} />
-                    </View>
-                </Pressable>
+                {/*<Pressable className="flex flex-col items-start gap-4 bg-[#181818] p-4 rounded-lg w-1/3" onPress={() => router.push('/search/hotel')} >*/}
+                {/*    <View className={'flex flex-row items-center justify-between w-full'}>*/}
+                {/*        <Text className="text-md font-semibold text-white">Hotel</Text>*/}
+                {/*        <View className={'transform -rotate-45'}>*/}
+                {/*            <ArrowRight size={16} color={'#fff'} />*/}
+                {/*        </View>*/}
+                {/*    </View>*/}
+                {/*    <View className="flex flex-row items-center gap-4">*/}
+                {/*        <MaterialIcons name={"hotel"} size={32} color={'#fff'} />*/}
+                {/*    </View>*/}
+                {/*</Pressable>*/}
             </View>
             {/* button suggestion city */}
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className="w-full">

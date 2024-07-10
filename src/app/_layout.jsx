@@ -3,6 +3,8 @@
 // Import your global CSS file
 import '@app/global.css';
 import '@app/style/global.css.android.css';
+import '@app/style/global.css.ios.css';
+import '@app/style/global.css.web.css';
 import React from 'react';
 import {Stack} from "expo-router";
 import { StatusBar } from 'expo-status-bar';
